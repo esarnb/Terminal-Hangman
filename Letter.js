@@ -3,7 +3,6 @@ var Letter = function(letter) {
     this.guessed = false;
 
     this.display = function() {
-        console.log("Ran Letter.Display".magenta);
         if (this.guessed) return this.letter;
         else return "_";
         
