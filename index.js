@@ -1,22 +1,21 @@
 var Word = require("./Word");
 var colors = require("colors");
+var randomWords = require("random-words");
 var inquirer = require("inquirer");
 
-var bank, tries;
-var arr = ["hey", "hello"];
-var newWord = new Word(arr[Math.floor(Math.random() * arr.length)]); 
+var bank, tries, newWord; 
 
 function createGame() {
-    console.clear()
     bank = [];
     tries = 10;
-    newWord = new Word(arr[Math.floor(Math.random() * arr.length)]); 
+    newWord = new Word(randomWords()); 
     askQuestions();
 }
 
 function askQuestions() {
-    var stillGoing = newWord.display().includes("_");
-    if ((tries > 0) && (stillGoing)) {
+    console.clear();
+    var currentWord = newWord.display();
+    if ((tries > 0) && (currentWord.includes("_"))) {
         console.log(newWord.display().cyan, "\nTries: " + tries, "\nUsed Keys: " + `[${bank.join(" ")}]`);
         inquirer.prompt([
             {
@@ -31,7 +30,7 @@ function askQuestions() {
         ]).then(function(response){
             newWord.checkLetter(response.inputLetter.toLowerCase());
             bank.push(response.inputLetter.toLowerCase());
-            tries--;
+            if (currentWord === newWord.display()) tries--;
 
             askQuestions();
         })
